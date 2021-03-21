@@ -20,9 +20,9 @@ export default {
    * sql database credientials
    */
   databaseHost: process.env.DATABASE_HOST,
-  databaseUser : process.env.DATABASE_USER,
-  databasePassword : process.env.DATABASE_PASSWORD,
-  databaseName : process.env.DATABASE_NAME,
+  databaseUser: process.env.DATABASE_USER,
+  databasePassword: process.env.DATABASE_PASSWORD,
+  databaseName: process.env.DATABASE_NAME,
   /**
    * Your secret sauce
    */
@@ -37,32 +37,18 @@ export default {
   },
 
   /**
-   * Agenda.js stuff
-   */
-  agenda: {
-    dbCollection: process.env.AGENDA_DB_COLLECTION,
-    pooltime: process.env.AGENDA_POOL_TIME,
-    concurrency: parseInt(process.env.AGENDA_CONCURRENCY, 10),
-  },
-
-  /**
-   * Agendash config
-   */
-  agendash: {
-    user: 'agendash',
-    password: '123456'
-  },
-  /**
    * API configs
    */
   api: {
     prefix: '/api',
   },
+
   /**
-   * Mailgun email credentials
+   * Google Login configs
    */
-  emails: {
-    apiKey: process.env.MAILGUN_API_KEY || 'no',
-    domain: process.env.MAILGUN_DOMAIN || 'no'
+  google: {
+    clientId: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
+    redirect: process.env.REDIRECT
   }
 };

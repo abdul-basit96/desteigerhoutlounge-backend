@@ -28,7 +28,7 @@ export default (app: Router) => {
 
       logger.debug('Calling Sign-Up endpoint with body: %o', req.body);
       try {
-        const { user, token } = await authServiceInstance.SignUp(req.body as IUserInputDTO);
+        const { user, token } = await authServiceInstance.signUp(req.body as IUserInputDTO);
         return res.status(201).json({ user, token });
       } catch (e) {
         return next(e);
@@ -47,14 +47,38 @@ export default (app: Router) => {
     async (req: Request, res: Response, next: NextFunction) => {
       logger.debug('Calling Sign-In endpoint with body: %o', req.body);
       try {
-        const { token } = await authServiceInstance.SignIn(req.body as IUserInputDTO);
+        const { token } = await authServiceInstance.signIn(req.body as IUserInputDTO);
         return res.json({ token }).status(200);
       } catch (e) {
         return next(e);
       }
-    },
+    }
   );
 
+  route.post(
+    '/google/login',
+    async (req: Request, res: Response, next: NextFunction) => {
+
+      try {
+        const { url } = await authServiceInstance.googleLogin();
+        return res.json({ url }).status(200);
+      } catch (e) {
+        return next(e);
+      }
+    }
+  );
+
+  route.get(
+    '/google/callback',
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        await authServiceInstance.googleCallback(String(req.query.code));
+        res.send('ok').status(200);
+      } catch (e) {
+        return next(e);
+      }
+    }
+  )
   /**
    * @TODO Let's leave this as a place holder for now
    * The reason for a logout route could be deleting a 'push notification token'

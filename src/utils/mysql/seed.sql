@@ -1,13 +1,13 @@
 
 
 
-// need to write mysql creation queries here
+// need to run these queries once before project for mysql setup
 
- await connection.query(`CREATE DATABASE IF NOT EXISTS LOUNGE_DB;`);
-        await connection.query('use LOUNGE_DB;')
-        let userTable = `create table if not exists user(
-          id int primary key auto_increment,
-          email varchar(255)not null,
-          name varchar(255)not null,
-          password varchar(255)not null
-          )`;
+ `CREATE DATABASE IF NOT EXISTS LOUNGE_DB;`;
+  'use LOUNGE_DB;'
+  `create table if not exists user(
+    id int primary key auto_increment,
+    email varchar(255)not null,
+    name varchar(255)not null,
+    password varchar(255)not null
+    )`;
