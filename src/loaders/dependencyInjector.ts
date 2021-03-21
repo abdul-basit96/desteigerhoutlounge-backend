@@ -1,27 +1,15 @@
 import { Container } from 'typedi';
 import LoggerInstance from './logger';
-// import agendaFactory from './agenda';
-import config from '../config';
-import mailgun from 'mailgun-js';
+import { ResponseCodes, ResponseNames } from '../enums';
+import Query from '../utils/mysql/query';
 
-export default (
-   mysqlInstance
-  ) => {
+export default () => {
   try {
-    // models.forEach(m => {
-    //   Container.set(m.name, m.model);
-    // });
-
-    // const agendaInstance = agendaFactory({ mongoConnection });
-
-    // Container.set('agendaInstance', agendaInstance);
-    Container.set('mysql',mysqlInstance)
+    // Container.set('mysql',mysqlInstance);
+    Container.set('responseCodes', ResponseCodes);
+    Container.set('responseNames', ResponseNames);
     Container.set('logger', LoggerInstance);
-    // Container.set('emailClient', mailgun({ apiKey: config.emails.apiKey, domain: config.emails.domain }));
-
-    // LoggerInstance.info('✌️ Agenda injected into container');
-
-    // return { agenda: agendaInstance };
+    Container.set('mysql', Container.get(Query));
   } catch (e) {
     LoggerInstance.error('🔥 Error on dependency injector loader: %o', e);
     throw e;
