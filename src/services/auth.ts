@@ -1,11 +1,12 @@
 import { Service, Inject } from 'typedi';
 import jwt from 'jsonwebtoken';
 import config from '../config';
-import { IUserInputDTO } from '../interfaces/IUser';
+import { IUserInputDTO } from '../interfaces';
 import { EventDispatcher, EventDispatcherInterface } from '../decorators/eventDispatcher';
 import ApiError from '../utils/error';
 import bcrypt from 'bcrypt';
 import { google } from 'googleapis';
+import { DBTables, ResponseCodes, ResponseMessages, ResponseNames } from '../enums';
 
 @Service()
 export default class AuthService {
@@ -20,12 +21,12 @@ export default class AuthService {
 
   public async signUp(userData: IUserInputDTO): Promise<{ user: IUserInputDTO; token: string }> {
 
-    const user = await this.mysql.find({ email: userData.email }, "USER");
-    if (user) throw new ApiError(400, 'User Exist', 'User already exist');
+    const user = await this.mysql.find(DBTables.USER, { email: userData.email });
+    if (user) throw new ApiError(ResponseCodes.BAD_REQUEST, ResponseNames.BAD_REQUEST, ResponseMessages.USER_ALREADY_EXIST);
 
     const hash = bcrypt.hashSync(userData.password, this.saltRounds);
 
-    await this.mysql.insert({ email: userData.email, name: userData.name, password: hash }, "USER");
+    await this.mysql.insert(DBTables.USER, { email: userData.email, name: userData.name, password: hash });
     const token = await this.generateToken(userData);
     return { user: userData, token };
 
@@ -33,14 +34,14 @@ export default class AuthService {
 
   public async signIn(userData: IUserInputDTO): Promise<{ token: string }> {
 
-    const user = await this.mysql.find({ email: userData.email }, "USER");
+    const user = await this.mysql.find(DBTables.USER, { email: userData.email });
     if (user) {
       const match = await bcrypt.compare(userData.password, user.password);
-      if (!match) throw new ApiError(404, 'Incorrect Password', 'password doesn\'t match');
+      if (!match) throw new ApiError(ResponseCodes.NOT_FOUND, ResponseNames.NOT_FOUND, ResponseMessages.INCORRECT_PASSWORD);
       const token = await this.generateToken(user);
       return { token };
     } else {
-      throw new ApiError(404, 'Not Found', 'User not exist');
+      throw new ApiError(ResponseCodes.NOT_FOUND, ResponseNames.NOT_FOUND, ResponseMessages.USER_NOT_EXIST);
     }
 
   }

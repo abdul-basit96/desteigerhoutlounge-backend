@@ -2,6 +2,7 @@ export enum ResponseCodes {
     SERVER_ERROR = 500,
     NOT_FOUND = 404,
     SUCESS = 200,
+    BAD_REQUEST = 400
 }
 
 
@@ -9,4 +10,18 @@ export enum ResponseNames {
     SUCCESS = "SUCCESS",
     SERVER_ERROR = "SERVER ERROR",
     NOT_FOUND = "NOT FOUND",
+    BAD_REQUEST = "BAD REQUEST"
+}
+
+export enum ResponseMessages {
+    USER_ALREADY_EXIST = "SORRY, USER ALREADY EXIST",
+    INCORRECT_PASSWORD = "INCORRECT PASSWORD, PLEASE TRY AGAIN",
+    USER_NOT_EXIST = "SORRY, USER NOT EXIST",
+    SERVER_ERROR = "SOME SERVER_ERROR OCCOURED, PLEASE TRY AGAIN"
+}
+
+export enum DBTables {
+    USER = 'USER',
+    PRODUCT = 'PRODUCT',
+    CHECKOUT = 'CHECKOUT'
 }
